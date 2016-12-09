@@ -1,6 +1,6 @@
 define( [
 	"../core"
-], function( _jQuery, noGlobal ) {
+], function( jQuery, noGlobal, globalObject ) {
 
 "use strict";
 
@@ -10,25 +10,25 @@ define( [
 		
 		// Copy existing global jQuery
 
-		var jQueryImported = jQuery;
+		var _jQuery = globalObject.jQuery;
 
 		// Copy existing global $
 
-		var $Imported = $;
+		var _$ = globalObject.$;
 
-		_jQuery.noConflict = function( deep ) {
-			if ( $ === _jQuery ) {
-				$ = $Imported;
+		jQuery.noConflict = function( deep ) {
+			if ( globalObject.$ === _jQuery ) {
+				globalObject.$ = _$;
 			}
 
 			if ( deep && jQuery === _jQuery ) {
-				jQuery = jQueryImported;
+				globalObject.jQuery = _jQuery;
 			}
 
-			return _jQuery;
+			return jQuery;
 		};
 		
 		
-		jQuery = $ = _jQuery;
+		globalObject.jQuery = globalObject.$ = jQuery;
 	}
 } );

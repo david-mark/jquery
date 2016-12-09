@@ -13,11 +13,6 @@
  * Date: @DATE
  */
 
-// Create global properties to be filled in by core when appropriate.
-// Will be deleted in modular environments
-
-var $, jQuery;
-
 ( function( global, factory ) {
 
 "use strict";
@@ -60,16 +55,15 @@ var $, jQuery;
 
 		// For environments lacking module.exports (e.g. browsers without CommonJS)
 
+
 		if ( !global.document ) {
 			throw new Error( errorMessage );
 		}
 
-		// NOTE: global object assumed to be equivalent to window in browsers
-
-		factory( global );
+		factory( global.window, false, global );
 	}
 
-} )( this, function( window, noGlobal ) {
+} )( this, function( window, noGlobal, globalObject ) {
 
 // Edge <= 12 - 13+, Firefox <=18 - 45+, IE 10 - 11, Safari 5.1 - 9+, iOS 6 - 9.1
 // throw exceptions when non-strict code (e.g., ASP.NET 4.5) accesses strict mode

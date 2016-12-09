@@ -1,6 +1,6 @@
 define( [
 	"../core"
-], function( _jQuery ) {
+], function( jQuery ) {
 
 "use strict";
 
@@ -12,7 +12,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		bulk = key == null;
 
 	// Sets many values
-	if ( _jQuery.type( key ) === "object" ) {
+	if ( jQuery.type( key ) === "object" ) {
 		chainable = true;
 		for ( i in key ) {
 			access( elems, fn, i, key[ i ], true, emptyGet, raw );
@@ -22,7 +22,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	} else if ( value !== undefined ) {
 		chainable = true;
 
-		if ( !_jQuery.isFunction( value ) ) {
+		if ( !jQuery.isFunction( value ) ) {
 			raw = true;
 		}
 
@@ -37,7 +37,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 			} else {
 				bulk = fn;
 				fn = function( elem, key, value ) {
-					return bulk.call( _jQuery( elem ), value );
+		jQueryrn bulk.call( jQuery( elem ), value );
 				};
 			}
 		}

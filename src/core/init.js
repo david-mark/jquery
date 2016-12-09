@@ -4,7 +4,7 @@ define( [
 	"../var/document",
 	"./var/rsingleTag",
 	"../traversing/findFilter"
-], function( _jQuery, document, rsingleTag ) {
+], function( jQuery, document, rsingleTag ) {
 
 "use strict";
 
@@ -17,7 +17,7 @@ var rootjQuery,
 	// Shortcut simple #id case for speed
 	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]+))$/,
 
-	init = _jQuery.fn.init = function( selector, context, root ) {
+	init = jQuery.fn.init = function( selector, context, root ) {
 		var match, elem;
 
 		// HANDLE: $(""), $(null), $(undefined), $(false)
@@ -47,22 +47,22 @@ var rootjQuery,
 
 				// HANDLE: $(html) -> $(array)
 				if ( match[ 1 ] ) {
-					context = context instanceof _jQuery ? context[ 0 ] : context;
+					context = context instanceof jQuery ? context[ 0 ] : context;
 
 					// Option to run scripts is true for back-compat
 					// Intentionally let the error be thrown if parseHTML is not present
-					_jQuery.merge( this, _jQuery.parseHTML(
+					jQuery.merge( this, jQuery.parseHTML(
 						match[ 1 ],
 						context && context.nodeType ? context.ownerDocument || context : document,
 						true
 					) );
 
 					// HANDLE: $(html, props)
-					if ( rsingleTag.test( match[ 1 ] ) && _jQuery.isPlainObject( context ) ) {
+					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
 						for ( match in context ) {
 
 							// Properties of context are called as methods if possible
-							if ( _jQuery.isFunction( this[ match ] ) ) {
+							if ( jQuery.isFunction( this[ match ] ) ) {
 								this[ match ]( context[ match ] );
 
 							// ...and otherwise set as attributes
@@ -105,22 +105,22 @@ var rootjQuery,
 
 		// HANDLE: $(function)
 		// Shortcut for document ready
-		} else if ( _jQuery.isFunction( selector ) ) {
+		} else if ( jQuery.isFunction( selector ) ) {
 			return root.ready !== undefined ?
 				root.ready( selector ) :
 
 				// Execute immediately if ready is not present
-				selector( _jQuery );
+				selector( jQuery );
 		}
 
-		return _jQuery.makeArray( selector, this );
+		return jQuery.makeArray( selector, this );
 	};
 
 // Give the init function the jQuery prototype for later instantiation
-init.prototype = _jQuery.fn;
+init.prototype = jQuery.fn;
 
 // Initialize central reference
-rootjQuery = _jQuery( document );
+rootjQuery = jQuery( document );
 
 return init;
 
