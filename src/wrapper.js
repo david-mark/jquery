@@ -12,29 +12,41 @@
  *
  * Date: @DATE
  */
+
+// Create global properties to be filled in by core when appropriate.
+// Will be deleted in modular environments
+
+this.$ = this.jQuery = null;
+
 ( function( global, factory ) {
 
 "use strict";
 	
-	// TODO: Adjust unit tests that look for a different message (mentions window)
-
-	var errorMessage = "jQuery requires a global document";
+	// TODO: In browsers the message should be:
+	//       "jQuery requires a global document".
+	
+	var errorMessage = "jQuery requires a window with a document";
 
 	// If modular environment (e.g. NodeJS, CommonJS in browser)...
 	
 	if ( typeof module === "object" && typeof module.exports === "object" ) {
 
+		// No need for globals in modular environment
+		
+		delete global.$;
+		delete global.jQuery;
+		
 		// If a global document exists (e.g. in browsers):
 		
 		module.exports = ( global.document ) ?
-			
+
 			// Common JS in browser. Don't create a global.
 			// NOTE: global object assumed to be equivalent to window in browsers
-			
+
 			factory( global, true ) :
 
-			// NodeJS is passed a fake window object
-		
+			// NodeJS modules pass a fake window object
+
 			function( window ) {
 
 				// If no document property on fake window...
@@ -56,7 +68,7 @@
 		if ( !global.document ) {
 			throw new Error( errorMessage );
 		}
-		
+
 		// NOTE: global object assumed to be equivalent to window in browsers
 
 		factory( global );
