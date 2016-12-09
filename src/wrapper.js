@@ -16,18 +16,18 @@
 ( function( global, factory ) {
 
 "use strict";
-	
+
 	// TODO: In browsers the message should be:
 	//       "jQuery requires a global document".
-	
+
 	var errorMessage = "jQuery requires a window with a document";
 
 	// If modular environment (e.g. NodeJS, CommonJS in browser)...
-	
+
 	if ( typeof module === "object" && typeof module.exports === "object" ) {
 
 		// If a global document exists (e.g. in browsers):
-		
+
 		module.exports = ( global.document ) ?
 
 			// Common JS in browser. Don't create a global.
@@ -40,7 +40,7 @@
 			function( window ) {
 
 				// If no document property on fake window...
-			
+
 				if ( !window.document ) {
 					throw new Error( errorMessage );
 				}
@@ -48,13 +48,12 @@
 				// Don't augment the fake window either
 				// TODO: Adjust unit tests that expect a mutated window
 				//       OR remove second argument if necessary for backward compatibility
-			
+
 				return factory( window, true );
 			};
 	} else {
 
 		// For environments lacking module.exports (e.g. browsers without CommonJS)
-
 
 		if ( !global.document ) {
 			throw new Error( errorMessage );

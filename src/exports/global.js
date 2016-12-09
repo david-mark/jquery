@@ -7,7 +7,7 @@ define( [
 	// If not restricted from exporting jQuery to global scope...
 
 	if ( !noGlobal ) {
-		
+
 		// Copy existing global jQuery
 
 		var _jQuery = globalObject.jQuery;
@@ -27,8 +27,7 @@ define( [
 
 			return jQuery;
 		};
-		
-		
+
 		globalObject.jQuery = globalObject.$ = jQuery;
 	}
 } );
