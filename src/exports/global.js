@@ -21,8 +21,8 @@ define( [
 				globalObject.$ = _$;
 			}
 
-			if ( deep && jQuery === _jQuery ) {
-				globalObject.jQuery = jQuery;
+			if ( deep && globalObject.jQuery === jQuery ) {
+				globalObject.jQuery = _jQuery;
 			}
 
 			return jQuery;
