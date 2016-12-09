@@ -6,7 +6,7 @@ define( [
 
 	// This is the only module that needs core/support
 	"./support"
-], function( jQuery, document, rsingleTag, buildFragment, support ) {
+], function( _jQuery, document, rsingleTag, buildFragment, support ) {
 
 "use strict";
 
@@ -14,7 +14,7 @@ define( [
 // context (optional): If specified, the fragment will be created in this context,
 // defaults to document
 // keepScripts (optional): If true, will include scripts passed in the html string
-jQuery.parseHTML = function( data, context, keepScripts ) {
+_jQuery.parseHTML = function( data, context, keepScripts ) {
 	if ( typeof data !== "string" ) {
 		return [];
 	}
@@ -54,12 +54,12 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 	parsed = buildFragment( [ data ], context, scripts );
 
 	if ( scripts && scripts.length ) {
-		jQuery( scripts ).remove();
+		_jQuery( scripts ).remove();
 	}
 
-	return jQuery.merge( [], parsed.childNodes );
+	return _jQuery.merge( [], parsed.childNodes );
 };
 
-return jQuery.parseHTML;
+return _jQuery.parseHTML;
 
 } );
