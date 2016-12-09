@@ -17,12 +17,12 @@ define( [
 		var _$ = globalObject.$;
 
 		jQuery.noConflict = function( deep ) {
-			if ( globalObject.$ === _jQuery ) {
+			if ( globalObject.$ === jQuery ) {
 				globalObject.$ = _$;
 			}
 
 			if ( deep && jQuery === _jQuery ) {
-				globalObject.jQuery = _jQuery;
+				globalObject.jQuery = jQuery;
 			}
 
 			return jQuery;
