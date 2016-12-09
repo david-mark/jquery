@@ -16,7 +16,7 @@
 // Create global properties to be filled in by core when appropriate.
 // Will be deleted in modular environments
 
-this.$ = this.jQuery = null;
+var $, jQuery;
 
 ( function( global, factory ) {
 
@@ -31,11 +31,6 @@ this.$ = this.jQuery = null;
 	
 	if ( typeof module === "object" && typeof module.exports === "object" ) {
 
-		// No need for globals in modular environment
-		
-		delete global.$;
-		delete global.jQuery;
-		
 		// If a global document exists (e.g. in browsers):
 		
 		module.exports = ( global.document ) ?
