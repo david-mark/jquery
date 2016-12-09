@@ -1,34 +1,32 @@
 define( [
 	"../core"
-], function( jQuery, noGlobal ) {
+], function( _jQuery, noGlobal ) {
 
 "use strict";
 
-	// Map over jQuery in case of overwrite
+	// Copy existing global jQuery
 
-	var _jQuery = globalObject.jQuery;
+	var jQueryImported = jQuery;
 
-	// Map over the $ in case of overwrite
+	// Copy existing global $
 
-	var _$ = globalObject.$;
+	var $Imported = $;
 
-	jQuery.noConflict = function( deep ) {
-		if ( globalObject.$ === jQuery ) {
-			globalObject.$ = _$;
+	_jQuery.noConflict = function( deep ) {
+		if ( $ === _jQuery ) {
+			$ = $Imported;
 		}
 
-		if ( deep && global.jQuery === jQuery ) {
-			globalObject.jQuery = _jQuery;
+		if ( deep && jQuery === _jQuery ) {
+			jQuery = jQueryImported;
 		}
 
-		return jQuery;
+		return _jQuery;
 	};
-
-	// Expose jQuery and $ identifiers, even in AMD
-	// (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
-	// and CommonJS for browser emulators (#13566)
+	
+	// If not restricted from exporting jQuery to global scope...
 
 	if ( !noGlobal ) {
-		globalObject.jQuery = globalObject.$ = jQuery;
+		jQuery = $ = _jQuery;
 	}
 } );
