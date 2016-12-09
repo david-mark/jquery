@@ -7,7 +7,7 @@
 	},
 	"globals": {
 		"window": true,
-		"_jQuery": true,
+		"jQuery": true,
 		"define": true,
 		"module": true,
 		"noGlobal": true,
