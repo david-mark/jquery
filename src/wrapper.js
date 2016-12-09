@@ -15,63 +15,54 @@
 ( function( global, factory ) {
 
 "use strict";
+	
+	// TODO: Adjust unit tests that look for a different message (mentions window)
 
-	var errorMessage = "jQuery requires a window with a document";
+	var errorMessage = "jQuery requires a global document";
 
+	// If modular environment (e.g. NodeJS, CommonJS in browser)...
+	
 	if ( typeof module === "object" && typeof module.exports === "object" ) {
 
-		// For CommonJS and CommonJS-like environments where a proper `window`
-		// is present, execute the factory and get jQuery.
-		// For environments that do not have a global `document`
-		// (such as Node.js), expose a factory as module.exports.
+		// If a global document exists (e.g. in browsers):
+		
+		module.exports = ( global.document ) ?
+			
+			// Common JS in browser. Don't create a global.
+			// NOTE: global object assumed to be equivalent to window in browsers
+			
+			factory( global, true ) :
 
-		module.exports = ( global.window && global.window.document ) ?
-			factory( global.window, true, global ) :
+			// NodeJS is passed a fake window object
+		
+			function( window ) {
 
-			// NOTE, may pass either global OR window object for first argument
-			// Second argument is used only when window is not global AND
-			// caller wants to augment the global object with $ and jQuery
-
-			function( global, window ) {
-
-				// If no window reference passed...
-
-				if ( !window ) {
-
-					// If window is not available on the global object (or fake window object or whatever)...
-
-					if ( !global.window ) {
-						throw new Error( errorMessage );
-					}
-
-					// Get the window reference from the global object (*may* be the same object)
-
-					window = global.window;
-				}
-
+				// If no document property on fake window...
+			
 				if ( !window.document ) {
 					throw new Error( errorMessage );
 				}
 
-				return factory( window, false, global );
+				// Don't augment the fake window either
+				// TODO: Adjust unit tests that expect a mutated window
+				//       OR remove second argument if necessary for backward compatibility
+			
+				return factory( window, true );
 			};
 	} else {
 
-		// For environments lacking module.exports (e.g. browsers)
-		// Pass a reference to the global `window` object
+		// For environments lacking module.exports (e.g. browsers without CommonJS)
 
-		if ( !global.window ) {
+		if ( !global.document ) {
 			throw new Error( errorMessage );
 		}
+		
+		// NOTE: global object assumed to be equivalent to window in browsers
 
-		if ( !global.window.document ) {
-			throw new Error( errorMessage );
-		}
-
-		factory( global.window, false, global );
+		factory( global );
 	}
 
-} )( typeof global == "undefined" ? this : global, function( window, noGlobal, globalObject ) {
+} )( this, function( window, noGlobal ) {
 
 // Edge <= 12 - 13+, Firefox <=18 - 45+, IE 10 - 11, Safari 5.1 - 9+, iOS 6 - 9.1
 // throw exceptions when non-strict code (e.g., ASP.NET 4.5) accesses strict mode
