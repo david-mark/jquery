@@ -28,12 +28,11 @@
 
 		// If a global document exists (e.g. in browsers):
 
-		module.exports = ( global.document ) ?
+		module.exports = ( global.window && global.document ) ?
 
 			// Common JS in browser. Don't create a global.
-			// NOTE: global object assumed to be equivalent to window in browsers
 
-			factory( global, true ) :
+			factory( global.window, true ) :
 
 			// NodeJS modules pass a fake window object
 
@@ -45,17 +44,15 @@
 					throw new Error( errorMessage );
 				}
 
-				// Don't augment the fake window either
-				// TODO: Adjust unit tests that expect a mutated window
-				//       OR remove second argument if necessary for backward compatibility
+				// TODO: Don't augment the fake window (done for compatibility at moment)
 
-				return factory( window, true );
+				return factory( window, false, window );
 			};
 	} else {
 
 		// For environments lacking module.exports (e.g. browsers without CommonJS)
 
-		if ( !global.document ) {
+		if ( !global.document || !global.window ) {
 			throw new Error( errorMessage );
 		}
 
