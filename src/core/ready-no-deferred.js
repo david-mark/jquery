@@ -1,7 +1,7 @@
 define( [
 	"../core",
 	"../var/document"
-], function( jQuery, document ) {
+], function( _jQuery, document ) {
 
 "use strict";
 
@@ -14,16 +14,16 @@ var readyCallbacks = [],
 		// Prevent errors from freezing future callback execution (gh-1823)
 		// Not backwards-compatible as this does not execute sync
 		window.setTimeout( function() {
-			fn.call( document, jQuery );
+			fn.call( document, _jQuery );
 		} );
 	};
 
-jQuery.fn.ready = function( fn ) {
+_jQuery.fn.ready = function( fn ) {
 	whenReady( fn );
 	return this;
 };
 
-jQuery.extend( {
+_jQuery.extend( {
 
 	// Is the DOM ready to be used? Set to true once it occurs.
 	isReady: false,
@@ -35,24 +35,24 @@ jQuery.extend( {
 	// Hold (or release) the ready event
 	holdReady: function( hold ) {
 		if ( hold ) {
-			jQuery.readyWait++;
+			_jQuery.readyWait++;
 		} else {
-			jQuery.ready( true );
+			_jQuery.ready( true );
 		}
 	},
 
 	ready: function( wait ) {
 
 		// Abort if there are pending holds or we're already ready
-		if ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {
+		if ( wait === true ? --_jQuery.readyWait : _jQuery.isReady ) {
 			return;
 		}
 
 		// Remember that the DOM is ready
-		jQuery.isReady = true;
+		_jQuery.isReady = true;
 
 		// If a normal DOM Ready event fired, decrement, and wait if need be
-		if ( wait !== true && --jQuery.readyWait > 0 ) {
+		if ( wait !== true && --_jQuery.readyWait > 0 ) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ jQuery.extend( {
 
 			while ( readyCallbacks.length ) {
 				fn = readyCallbacks.shift();
-				if ( jQuery.isFunction( fn ) ) {
+				if ( _jQuery.isFunction( fn ) ) {
 					executeReady( fn );
 				}
 			}
@@ -72,7 +72,7 @@ jQuery.extend( {
 } );
 
 // Make jQuery.ready Promise consumable (gh-1778)
-jQuery.ready.then = jQuery.fn.ready;
+_jQuery.ready.then = _jQuery.fn.ready;
 
 /**
  * The ready event handler and self cleanup method
@@ -80,7 +80,7 @@ jQuery.ready.then = jQuery.fn.ready;
 function completed() {
 	document.removeEventListener( "DOMContentLoaded", completed );
 	window.removeEventListener( "load", completed );
-	jQuery.ready();
+	_jQuery.ready();
 }
 
 // Catch cases where $(document).ready() is called
@@ -91,7 +91,7 @@ if ( document.readyState === "complete" ||
 	( document.readyState !== "loading" && !document.documentElement.doScroll ) ) {
 
 	// Handle it asynchronously to allow scripts the opportunity to delay ready
-	window.setTimeout( jQuery.ready );
+	window.setTimeout( _jQuery.ready );
 
 } else {
 
