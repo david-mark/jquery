@@ -61,7 +61,7 @@ jQuery.param = function( a, traditional ) {
 		add = function( key, valueOrFunction ) {
 
 			// If value is a function, invoke it and use its return value
-			var value = jQuery.isFunction( valueOrFunction ) ?
+			var value = typeof valueOrFunction == "function" ?
 				valueOrFunction() :
 				valueOrFunction;
 
