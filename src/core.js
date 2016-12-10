@@ -147,7 +147,7 @@ extend = jQuery.extend = jQuery.fn.extend = ( function() {
 
 	/* eslint-disable eqeqeq */
 	// Extra "=" makes no sense when both sides are always the same type
-	// TODO: Adjust lint rules so this is required only when it makes sense
+	// TODO: Adjust lint rules so this is required only when it makes sense for clarity
 
 	// jQuery.isPlainObject is deprecated
 	function isPlainObject( obj ) {
@@ -156,7 +156,7 @@ extend = jQuery.extend = jQuery.fn.extend = ( function() {
 		if ( toString.call( obj ) == "[object Object]" ) {
 			proto = getProto( obj );
 
-			// Objects foolish enough to have their own - hasOwnProperty - property are not supported
+			// Objects foolish enough to have prototypes with their own - hasOwnProperty - property are not supported
 			return !proto || proto.hasOwnProperty( "hasOwnProperty" );
 		}
 
@@ -192,7 +192,7 @@ extend = jQuery.extend = jQuery.fn.extend = ( function() {
 
 			// Only deal with non-null/undefined values
 			// NOTE: How was the previous source != null getting away with loose comparison?
-			//       In any event, it is obfuscating to do loose comparison to null
+			// In any event, it is obfuscating to do loose comparison to null
 			if ( source !== null && source !== undefined ) {
 
 				// Extend the base object
@@ -274,7 +274,9 @@ jQuery.extend( {
 		/* eslint-disable no-undef */
 		// This function is conditionally created, depending on whether console.warn exists
 		// NOTE: This is "scaffolding" code that can be removed in production builds
-		depecrated( "isPlainObject" );
+		if ( deprecated ) {
+			deprecrated( "isPlainObject" );
+		}
 
 		var proto, Ctor;
 
