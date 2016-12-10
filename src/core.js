@@ -47,6 +47,17 @@ var
 		return letter.toUpperCase();
 	};
 
+/* eslint-disable no-unused-vars */
+// Conditionally created function is used inside functions when it exists
+var deprecated = null;
+
+if ( typeof window.console != "undefined" && typeof window.console.warn != "undefined" ) {
+	deprecated = jQuery.deprecated = function( feature, alternative ) {
+		alternative = alternative || "Please find another way.";
+		window.console.warn( feature + " is deprecated! " + alternative );
+	};
+}
+
 jQuery.fn = jQuery.prototype = {
 
 	// The current version of jQuery being used
@@ -128,74 +139,99 @@ jQuery.fn = jQuery.prototype = {
 	splice: arr.splice
 };
 
-jQuery.extend = jQuery.fn.extend = function() {
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[ 0 ] || {},
-		i = 1,
-		length = arguments.length,
-		deep = false;
+//
+var extend;
 
-	// Handle a deep copy situation
-	if ( typeof target === "boolean" ) {
-		deep = target;
+extend = jQuery.extend = jQuery.fn.extend = ( function() {
 
-		// Skip the boolean and the target
-		target = arguments[ i ] || {};
-		i++;
+	/* eslint-disable eqeqeq */
+	// Extra "=" makes no sense when both sides are always the same type
+	// TODO: Adjust lint rules so this is required only when it makes sense
+
+	// jQuery.isPlainObject is deprecated
+	function isPlainObject( obj ) {
+
+		var proto;
+
+		if ( toString.call( obj ) == "[object Object]" ) {
+			proto = getProto( obj );
+
+			// Objects foolish enough to have their own - hasOwnProperty - property are not supported
+			return !proto || proto.hasOwnProperty( "hasOwnProperty" );
+		}
+
+		return false;
 	}
 
-	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
-		target = {};
-	}
+	return function() {
+		var source, name, sourceProperty, targetProperty, clonedTargetProperty,
+			target = arguments[ 0 ],
+			i = 1,
+			length = arguments.length,
+			deep = false;
 
-	// Extend jQuery itself if only one argument is passed
-	if ( i === length ) {
-		target = this;
-		i--;
-	}
+		// Handle a deep copy situation
+		if ( typeof target == "boolean" ) {
+			deep = target;
 
-	for ( ; i < length; i++ ) {
+			// Skip the boolean and the target
+			target = arguments[ i ];
+			i++;
+		}
 
-		// Only deal with non-null/undefined values
-		if ( ( options = arguments[ i ] ) != null ) {
+		// Extend jQuery itself if only one argument is passed
 
-			// Extend the base object
-			for ( name in options ) {
-				src = target[ name ];
-				copy = options[ name ];
+		if ( i == length ) {
+			target = this;
+			i--;
+		}
 
-				// Prevent never-ending loop
-				if ( target === copy ) {
-					continue;
-				}
+		// Loop through n objects
+		for ( ; i < length; i++ ) {
+			source = arguments[ i ];
 
-				// Recurse if we're merging plain objects or arrays
-				if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
-					( copyIsArray = Array.isArray( copy ) ) ) ) {
+			// Only deal with non-null/undefined values
+			// NOTE: How was the previous source != null getting away with loose comparison?
+			//       In any event, it is obfuscating to do loose comparison to null
+			if ( source !== null && source !== undefined ) {
 
-					if ( copyIsArray ) {
-						copyIsArray = false;
-						clone = src && Array.isArray( src ) ? src : [];
+				// Extend the base object
+				for ( name in source ) {
+					targetProperty = target[ name ];
+					sourceProperty = source[ name ];
 
-					} else {
-						clone = src && jQuery.isPlainObject( src ) ? src : {};
+					// Prevent infinite loop
+					if ( target !== sourceProperty ) {
+						if ( deep && sourceProperty ) {
+							clonedTargetProperty = null;
+
+							if ( Array.isArray( sourceProperty ) ) {
+								clonedTargetProperty = targetProperty &&
+									Array.isArray( targetProperty ) ?
+									targetProperty : [];
+							} else if ( isPlainObject( sourceProperty ) ) {
+								clonedTargetProperty = targetProperty &&
+									isPlainObject( targetProperty ) ?
+									targetProperty : {};
+							}
+
+							target[ name ] = clonedTargetProperty ?
+								extend( true, clonedTargetProperty, sourceProperty ) :
+								sourceProperty;
+
+						// Don't bring in undefined values
+						} else if ( sourceProperty !== undefined ) {
+							target[ name ] = sourceProperty;
+						}
 					}
-
-					// Never move original objects, clone them
-					target[ name ] = jQuery.extend( deep, clone, copy );
-
-				// Don't bring in undefined values
-				} else if ( copy !== undefined ) {
-					target[ name ] = copy;
 				}
 			}
 		}
-	}
 
-	// Return the modified object
-	return target;
-};
+		// Return the modified object
+		return target;
+	};
+} )();
 
 jQuery.extend( {
 
@@ -234,6 +270,12 @@ jQuery.extend( {
 	},
 
 	isPlainObject: function( obj ) {
+
+		/* eslint-disable no-undef */
+		// This function is conditionally created, depending on whether console.warn exists
+		// NOTE: This is "scaffolding" code that can be removed in production builds
+		depecrated( "isPlainObject" );
+
 		var proto, Ctor;
 
 		// Detect obvious negatives
