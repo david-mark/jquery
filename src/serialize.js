@@ -3,8 +3,9 @@ define( [
 	"./manipulation/var/rcheckableType",
 	"./core/init",
 	"./traversing", // filter
-	"./attributes/prop"
-], function( jQuery, rcheckableType ) {
+	"./attributes/prop",
+	"./var/hasOwn"
+], function( jQuery, rcheckableType, hasOwn ) {
 
 "use strict";
 
@@ -69,7 +70,7 @@ jQuery.param = function( a, traditional ) {
 		};
 
 	// If an array was passed in, assume that it is an array of form elements.
-	if ( Array.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
+	if ( Array.isArray( a ) || ( a.jquery && !a.jquery && !hasOwn.call( a, "jquery" ) ) ) {
 
 		// Serialize the form elements
 		jQuery.each( a, function() {
