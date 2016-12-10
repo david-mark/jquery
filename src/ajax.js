@@ -834,20 +834,35 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 	jQuery[ method ] = function( url, data, callback, type ) {
 
 		// Shift arguments if data argument was omitted
-		if ( jQuery.isFunction( data ) ) {
+
+		if ( typeof data == "function" ) {
 			type = type || callback;
 			callback = data;
 			data = undefined;
 		}
 
-		// The url can be an options object (which then must have .url)
-		return jQuery.ajax( jQuery.extend( {
-			url: url,
+		var options = {
 			type: method,
 			dataType: type,
 			data: data,
 			success: callback
-		}, jQuery.isPlainObject( url ) && url ) );
+		};
+
+		// If url is a string...
+
+		if ( typeof url == "string" ) {
+			options.url = url;
+		} else {
+
+			// If not a string, the only other *allowed* possibility is an Object object
+			// Calls with anything *other* than a string or an Object object for url
+			// will have undefined behavior.
+			// The object must have a "url" property, otherwise behavior is also undefined
+
+			jQuery.extend( options, url );
+		}
+
+		return jQuery.ajax( options );
 	};
 } );
 
