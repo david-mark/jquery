@@ -28,7 +28,9 @@
 
 		// If a global document exists (e.g. in browsers):
 
-		module.exports = ( global.window && global.document ) ?
+		// NOTE: Have to check for document as property of window due to use of fake window in NodeJS
+
+		module.exports = ( global.window && global.window.document ) ?
 
 			// Common JS in browser. Don't create a global.
 
@@ -52,14 +54,17 @@
 
 		// For environments lacking module.exports (e.g. browsers without CommonJS)
 
-		if ( !global.document || !global.window ) {
+		if ( !global.window || !global.window.document ) {
 			throw new Error( errorMessage );
 		}
 
 		factory( global.window, false, global );
 	}
 
-} )( this, function( window, noGlobal, globalObject ) {
+	// NOTE: would be able to pass - this - alone, except that the "document_present_originally"
+	// smoke test creates a fake CommonJS/browser environment in NodeJS that fails. :(
+
+} )( typeof global == "undefined" ? this : global, function( window, noGlobal, globalObject ) {
 
 // Edge <= 12 - 13+, Firefox <=18 - 45+, IE 10 - 11, Safari 5.1 - 9+, iOS 6 - 9.1
 // throw exceptions when non-strict code (e.g., ASP.NET 4.5) accesses strict mode
