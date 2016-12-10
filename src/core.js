@@ -139,7 +139,8 @@ jQuery.fn = jQuery.prototype = {
 	splice: arr.splice
 };
 
-//
+// We shouldn't call jQuery.extend from inside the core (outside code could change or delete it)
+// Extra dot operations affect performance as well
 var extend;
 
 extend = jQuery.extend = jQuery.fn.extend = ( function() {
@@ -150,7 +151,6 @@ extend = jQuery.extend = jQuery.fn.extend = ( function() {
 
 	// jQuery.isPlainObject is deprecated
 	function isPlainObject( obj ) {
-
 		var proto;
 
 		if ( toString.call( obj ) == "[object Object]" ) {
